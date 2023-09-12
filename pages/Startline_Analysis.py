@@ -1,6 +1,6 @@
 import streamlit as st
-import time
-import numpy as np
+
+from analysis._utils import get_regattas, get_races
 
 st.set_page_config(
     page_title="Sailing Data Analysis: Startline Analysis",
@@ -9,5 +9,9 @@ st.set_page_config(
 
 st.markdown("# Startline Analysis")
 st.write(
-    """Highlight where the top `x`% started on the start line."""
+    """Highlight where the top `x` sailors by windward mark position started."""
 )
+
+regatta = st.selectbox("Select Regatta:", get_regattas()["name"])
+
+st.selectbox("Select race:", get_races(regatta))

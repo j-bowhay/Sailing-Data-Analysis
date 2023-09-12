@@ -4,6 +4,8 @@ import streamlit as st
 import requests
 import pandas as pd
 
+from analysis._utils import get_regattas
+
 st.set_page_config(
     page_title="Sailing Data Analysis",
     page_icon="⛵",
@@ -13,22 +15,16 @@ st.write("# Sailing Data Analysis Tools")
 
 st.markdown(
     """
-    A collection of tools for analysing data from sailing regattas.
+    A collection of tools for analysing data from sailing regattas. Use the
+    sidebar to select an analysis.
     
     The following regattas are available through SAP Sailing:
 """
 )
 
 
-@st.cache_resource
-def get_data():
-    return pd.json_normalize(
-        json.loads(
-            requests.get("http://www.sapsailing.com/sailingserver/api/v1/regattas").text
-        )
-    )
 
-regattas_data = get_data()
+regattas_data = get_regattas()
 
 text_search = st.text_input("Search by regatta name:", value="")
 
