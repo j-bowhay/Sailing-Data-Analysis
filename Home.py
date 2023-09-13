@@ -23,7 +23,6 @@ st.markdown(
 )
 
 
-
 regattas_data = get_regattas()
 
 text_search = st.text_input("Search by regatta name:", value="")
