@@ -4,7 +4,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 
-from analysis._utils import get_regattas, get_races, get_start_data, get_mark_data
+from analysis._get_data import get_regattas, get_races, get_start_data, get_mark_data
+from analysis._utils import hide_streamlit
 
 
 def no_start_data():
@@ -16,6 +17,7 @@ st.set_page_config(
     page_title="Sailing Data Analysis: Startline Analysis",
     page_icon="⛵",
 )
+hide_streamlit()
 
 st.markdown("# Startline Analysis")
 st.write("""Highlight where the top `x` sailors by windward mark position started.""")
