@@ -4,12 +4,15 @@ import streamlit as st
 import requests
 import pandas as pd
 
-from analysis._utils import get_regattas
+from analysis._get_data import get_regattas
+from analysis._utils import hide_streamlit
+
 
 st.set_page_config(
     page_title="Sailing Data Analysis",
     page_icon="⛵",
 )
+hide_streamlit()
 
 st.write("# Sailing Data Analysis Tools")
 
