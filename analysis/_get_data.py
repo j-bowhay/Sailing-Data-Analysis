@@ -1,8 +1,22 @@
 import json
+import re
 
 import streamlit as st
 import pandas as pd
 import requests
+
+
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+
+def natural_keys(text):
+    """
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    """
+    return [atoi(c) for c in re.split(r"(\d+)", text)]
 
 
 @st.cache_resource
@@ -11,7 +25,7 @@ def get_regattas():
         json.loads(
             requests.get("http://www.sapsailing.com/sailingserver/api/v1/regattas").text
         )
-    )
+    ).sort_values(by="name")
 
 
 @st.cache_resource
@@ -23,7 +37,9 @@ def get_races(regatta):
     )
 
     if len(data["races"]) > 0:
-        return [race["name"].strip() for race in data["races"]]
+        return sorted(
+            [race["name"].strip() for race in data["races"]], key=natural_keys
+        )
     else:
         return [regatta]
 
