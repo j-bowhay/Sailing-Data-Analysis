@@ -70,7 +70,7 @@ ax.plot(0, 0, "k*", markersize=15)
 ax.plot(-line_lenght, 0, "k*", markersize=15)
 for i, c in enumerate(competitors):
     if i < mark_number:
-        ax.plot(-c.dist_from_strb, 0, "g.")
+        ax.plot(-c.dist_from_strb, 0, "g.", zorder=3)
     else:
         ax.plot(-c.dist_from_strb, 0, "r.")
 ax.set_axis_off()
@@ -83,7 +83,7 @@ ax.plot(0, 0, "k*", markersize=15)
 ax.plot(-line_lenght, 0, "k*", markersize=15)
 for i, c in enumerate(competitors):
     if i < mark_number:
-        ax.plot(-c.dist_from_strb, -c.dist_from_line, "g.")
+        ax.plot(-c.dist_from_strb, -c.dist_from_line, "g.", zorder=3)
     else:
         ax.plot(-c.dist_from_strb, -c.dist_from_line, "r.")
 ax.set_ylabel("Distance from line [m]")
