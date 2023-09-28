@@ -63,3 +63,12 @@ def get_mark_data(regatta, race):
             f"https://www.sapsailing.com/sailingserver/api/v1/regattas/{regatta}/races/{race}/markpassings"
         ).text
     )
+
+
+@st.cache_resource
+def get_leg_data(regatta, race):
+    return json.loads(
+        requests.get(
+            f"https://www.sapsailing.com/sailingserver/api/v1/regattas/{regatta}/races/{race}/competitors/legs"
+        ).text
+    )

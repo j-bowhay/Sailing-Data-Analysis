@@ -8,6 +8,7 @@ from scipy.stats import linregress
 
 from analysis._get_data import get_regattas, get_races, get_start_data, get_mark_data
 from analysis._utils import hide_streamlit
+from analysis._selection import select_regatta, select_race
 
 
 def no_start_data():
@@ -24,9 +25,9 @@ hide_streamlit()
 st.markdown("# Startline Analysis")
 st.write("""Highlight where the top `x` sailors by windward mark position started.""")
 
-regatta = st.selectbox("Select Regatta:", get_regattas()["name"])
+regatta = select_regatta()
 
-race = st.selectbox("Select race:", get_races(regatta))
+race = select_race(regatta)
 
 mark_number = st.number_input("Top `x` at windward mark to highlight:", value=10)
 
