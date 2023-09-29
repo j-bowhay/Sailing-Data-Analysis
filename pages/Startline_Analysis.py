@@ -70,6 +70,13 @@ for c in start_data["competitors"]:
 
 ww_sorted_competitior = sorted(competitors, key=lambda x: x.ww_time)
 
+st.header("Bias")
+st.write(
+    f"Biased end is {start_data['startline']['favoredEnd'].lower()}"
+    f" by {start_data['startline']['biasInMeters']}m over a "
+    f"{start_data['startline']['lengthInMeters']}m long line."
+)
+
 st.header("Start Line Distribution")
 
 fig, ax = plt.subplots()
@@ -81,7 +88,12 @@ for i, c in enumerate(ww_sorted_competitior):
         ax.plot(-c.dist_from_strb, 0, "g.", zorder=3)
     else:
         ax.plot(-c.dist_from_strb, 0, "r.")
-ax.set_axis_off()
+ax.get_yaxis().set_visible(False)
+ax.set_xlabel("Distance from Starboard End [m]")
+ax.set_xticks(ax.get_xticks().tolist())
+ax.set_xticklabels(
+    [label.get_text().replace("−", "") for label in ax.get_xticklabels()]
+)
 st.pyplot(fig)
 
 x = []
@@ -117,6 +129,7 @@ for i, c in enumerate(ww_sorted_competitior):
         ax.plot(-c.dist_from_strb, c.speed_start, "r.")
 ax.set_ylabel("Speed at go [knots]")
 ax.set_xlabel("Distance from Starboard End [m]")
+ax.set_xticks(ax.get_xticks().tolist())
 ax.set_xticklabels(
     [label.get_text().replace("−", "") for label in ax.get_xticklabels()]
 )
@@ -155,6 +168,7 @@ for i, c in enumerate(ww_sorted_competitior):
         ax.plot(-c.dist_from_strb, -c.dist_from_line, "r.")
 ax.set_ylabel("Distance from line [m]")
 ax.set_xlabel("Distance from Starboard End [m]")
+ax.set_xticks(ax.get_xticks().tolist())
 ax.set_xticklabels(
     [label.get_text().replace("−", "") for label in ax.get_xticklabels()]
 )
