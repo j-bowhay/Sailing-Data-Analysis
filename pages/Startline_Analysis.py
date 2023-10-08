@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import math
 
 import streamlit as st
 import numpy as np
@@ -48,12 +49,13 @@ except KeyError:
 class Competitor:
     name: str
     dist_from_strb: float
-    dist_from_line: float
+    dist_from_line_at_go: float
+    time_to_cross_line: float
     ww_time: int
     speed_start: float
 
 
-competitors = []
+competitors: list[Competitor] = []
 
 for c in start_data["competitors"]:
     for ww_pos in ww_mark_data:
@@ -62,11 +64,18 @@ for c in start_data["competitors"]:
                 Competitor(
                     name=c["competitor"]["name"],
                     dist_from_strb=c["distanceToStarboardSideOfStartLineInMeters"],
-                    dist_from_line=c["distanceToStartLineAtStartOfRaceInMeters"],
+                    dist_from_line_at_go=-c["distanceToStartLineAtStartOfRaceInMeters"],
+                    time_to_cross_line=c[
+                        "timeBetweenRaceStartAndCompetitorStartInSeconds"
+                    ],
                     speed_start=c["speedOverGroundAtStartOfRaceInKnots"],
                     ww_time=ww_pos["timeasmillis"],
                 )
             )
+
+# Correct the incorrectly signed dist to line
+for competitor in competitors:
+    competitor.dist_from_line_at_go *= np.sign(competitor.time_to_cross_line)
 
 ww_sorted_competitior = sorted(competitors, key=lambda x: x.ww_time)
 
@@ -163,9 +172,9 @@ ax.plot(0, 0, "k*", markersize=15)
 ax.plot(-line_lenght, 0, "k*", markersize=15)
 for i, c in enumerate(ww_sorted_competitior):
     if i < mark_number:
-        ax.plot(-c.dist_from_strb, -c.dist_from_line, "g.", zorder=3)
+        ax.plot(-c.dist_from_strb, c.dist_from_line_at_go, "g.", zorder=3)
     else:
-        ax.plot(-c.dist_from_strb, -c.dist_from_line, "r.")
+        ax.plot(-c.dist_from_strb, c.dist_from_line_at_go, "r.")
 ax.set_ylabel("Distance from line [m]")
 ax.set_xlabel("Distance from Starboard End [m]")
 ax.set_xticks(ax.get_xticks().tolist())
@@ -177,7 +186,7 @@ st.pyplot(fig)
 fig, ax = plt.subplots()
 x = []
 for i, c in enumerate(ww_sorted_competitior):
-    x.append(c.dist_from_line)
+    x.append(c.dist_from_line_at_go)
 
 result_dist = linregress(x, y)
 
